@@ -3,7 +3,7 @@ export interface Article {
   title: string;
   link: string;
   service: ArticleService;
-  is_pickup: string;
+  is_pickup: boolean;
   published: Date;
 }
 

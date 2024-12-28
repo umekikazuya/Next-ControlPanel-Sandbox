@@ -3,6 +3,7 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import { Article } from "@/model/article.model";
+import Link from "next/link";
 
 interface ArticleTableProps {
   articles: Article[];
@@ -21,7 +22,7 @@ const columns: GridColDef[] = [
       </a>
     ),
   },
-  { field: "service", headerName: "サービス", width: 150 },
+  { field: "service", headerName: "Service", width: 150 },
   {
     field: "is_pickup",
     headerName: "注目記事に表示する",
@@ -29,6 +30,16 @@ const columns: GridColDef[] = [
     type: "boolean",
   },
   { field: "published", headerName: "公開日", width: 150 },
+  {
+    field: "action",
+    headerName: "操作",
+    width: 150,
+    renderCell: (params) => (
+      <Link href={`/article/${params.row.id}`} style={{ color: "blue" }}>
+        編集
+      </Link>
+    ),
+  },
 ];
 
 export default function ArticleList({ articles }: ArticleTableProps) {
