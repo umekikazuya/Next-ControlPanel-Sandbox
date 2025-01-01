@@ -1,15 +1,21 @@
-"use client";
+'use client';
 
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import Paper from "@mui/material/Paper";
-import { Article } from "@/model/article.model";
+import { Link as MuiLink } from "@mui/material";
 import Link from "next/link";
+import { Article } from "@/model/article.model";
 
-interface ArticleTableProps {
-  articles: Article[];
+export const ArticleTable: React.FC<{ rows: Article[] }> = ({ rows }) => {
+  return (
+    <DataGrid
+      rows={rows}
+      columns={articleTableCol}
+      pageSizeOptions={[5, 10, 20]}
+    />
+  );
 }
 
-const columns: GridColDef[] = [
+const articleTableCol: GridColDef[] = [
   { field: "id", headerName: "ID", width: 70 },
   { field: "title", headerName: "記事名", width: 300 },
   {
@@ -35,21 +41,14 @@ const columns: GridColDef[] = [
     headerName: "操作",
     width: 150,
     renderCell: (params) => (
-      <Link href={`/article/${params.row.id}`} style={{ color: "blue" }}>
+      <MuiLink
+        href={`/article/${params.row.id}`}
+        component={Link}
+        underline="none"
+        color="inherit"
+      >
         編集
-      </Link>
+      </MuiLink>
     ),
   },
 ];
-
-export default function ArticleList({ articles }: ArticleTableProps) {
-  return (
-    <Paper>
-      <DataGrid
-        rows={articles}
-        columns={columns}
-        pageSizeOptions={[5, 10, 20]}
-      />
-    </Paper>
-  );
-}

@@ -2,17 +2,17 @@
 import {
   Box,
   Drawer,
-  Link,
+  Link as MuiLink,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   Toolbar,
 } from "@mui/material";
-import PersonIcon from '@mui/icons-material/Person';
-import DescriptionIcon from '@mui/icons-material/Description';
+import PersonIcon from "@mui/icons-material/Person";
+import DescriptionIcon from "@mui/icons-material/Description";
 import React from "react";
-import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 type MenuItem = {
   name: string;
@@ -27,13 +27,7 @@ const menuList: MenuItem[] = [
 const drawerWidth = 240;
 
 const SideBar = () => {
-  const pathname = usePathname();
-  const isSelected = (url: string) => {
-    if (pathname === url || pathname.startsWith(url + "/")) {
-      return true;
-    }
-    return false;
-  };
+
   return (
     <Drawer
       variant="permanent"
@@ -51,12 +45,18 @@ const SideBar = () => {
         <List>
           {menuList.map(({ name, url, icon }: MenuItem) => (
             <ListItem key={name} disablePadding>
-              <ListItemButton selected={isSelected(url)}>
-                <ListItemIcon>{icon}</ListItemIcon>
-                <Link href={url} underline="none" color="inherit">
+              <MuiLink
+                href={url}
+                component={Link}
+                underline="none"
+                color="inherit"
+                sx={{ width: "100%" }}
+              >
+                <ListItemButton>
+                  <ListItemIcon>{icon}</ListItemIcon>
                   {name}
-                </Link>
-              </ListItemButton>
+                </ListItemButton>
+              </MuiLink>
             </ListItem>
           ))}
         </List>

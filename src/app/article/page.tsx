@@ -1,9 +1,24 @@
-import ArticleList from "@/_components/list/articleList";
+import { ArticleTable } from "@/_components/table/articleTable";
 import { getArticles } from "@/lib/api";
+import { Paper } from "@mui/material";
+import { Suspense } from "react";
 
-const page = async () => {
+export default async function page() {
+  return (
+    <>
+      <Suspense fallback={<>Loading...</>}>
+        <Content />
+      </Suspense>
+    </>
+  );
+}
+
+async function Content() {
   const articleData = await getArticles();
-  return <ArticleList articles={articleData.data} />;
-};
 
-export default page;
+  return (
+    <Paper>
+      <ArticleTable rows={articleData.data} />
+    </Paper>
+  );
+}

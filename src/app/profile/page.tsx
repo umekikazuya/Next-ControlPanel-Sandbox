@@ -17,27 +17,42 @@ export async function formAction(formData: FormData): Promise<void> {
   const introduction = formData.get("introduction") as string;
   const job = formData.get("job") as string;
 
+  console.log(
+    displayName,
+    displayShortName,
+    github,
+    qiita,
+    zenn,
+    address,
+    skill,
+    from,
+    likes,
+    summaryIntroduction,
+    introduction,
+    job
+  );
+
   try {
-    const res = await fetch(`${process.env.NEXT_API_URL}/api/profile`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        displayName,
-        displayShortName,
-        github,
-        qiita,
-        zenn,
-        address,
-        skill,
-        from,
-        likes,
-        summaryIntroduction,
-        introduction,
-        job,
-      }),
-    });
+    // const res = await fetch(`${process.env.NEXT_API_URL}/api/profile`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     displayName,
+    //     displayShortName,
+    //     github,
+    //     qiita,
+    //     zenn,
+    //     address,
+    //     skill,
+    //     from,
+    //     likes,
+    //     summaryIntroduction,
+    //     introduction,
+    //     job,
+    //   }),
+    // });
 
     if (!res.ok) {
       const errorData = await res.json();
@@ -48,14 +63,20 @@ export async function formAction(formData: FormData): Promise<void> {
     // revalidatePath('/profile/edit');
 
     alert("更新しました");
-  } catch (error: any) {
+  } catch (error) {
     console.log(error);
   }
 }
 
-const page = async () => {
-  const profileData = await getProfile();
-  return <ProfileForm profile={profileData} />;
-};
-
-export default page;
+export default async function page() {
+  try {
+    const profile = await getProfile();
+    if (!("data" in profile) || !profile.data) {
+      return <div>データの取得に失敗しました。</div>;
+    }
+    return <ProfileForm profile={profile} />;
+  } catch (error) {
+    console.log(error);
+    return <div>データの取得に失敗しました。</div>;
+  }
+}
